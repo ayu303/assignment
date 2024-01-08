@@ -5,8 +5,8 @@ const HomePage = () => {
   const [fullName, setFullName] = useState('');
   const [contactNo, setContactNo] = useState('');
   const [email, setEmail] = useState('');
-  const [selectedService, setSelectedService] = useState(null);
-  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [selectedService, setSelectedService] = useState('');
+  const [selectedTeam, setSelectedTeam] = useState('');
 
   const handleServiceSelect = (service) => {
     setSelectedService(service);
@@ -17,10 +17,34 @@ const HomePage = () => {
   };
 
   const handleSubmit = () => {
-    // Implement logic to send form data to the backend
-    // You can use fetch or another library like Axios
-    console.log('Form data submitted:', { fullName, contactNo, email, selectedService, selectedTeam });
-  };
+    const formData = {
+      fullName,
+      contactNo,
+      email,
+      selectedService,
+      selectedTeam,
+    };
+    fetch('http://localhost:5000/api/submit-form', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Form data submitted successfully:', data);
+        // Optionally, you can reset the form fields here
+        setFullName('');
+        setContactNo('');
+        setEmail('');
+        setSelectedService('');
+        setSelectedTeam('');
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });};
+  
 
   return (
     <div className="container mt-5">
